@@ -7,6 +7,8 @@ export default function PlayersPage() {
     const [data, setData] = useState(null)
     const [isLoading, setLoading] = useState(true)
 
+    const [value, setValue] = useState('')
+
     useEffect(() => {
         fetch('https://www.balldontlie.io/api/v1/players')
             .then((res) => res.json())
@@ -24,7 +26,7 @@ export default function PlayersPage() {
         <div className="text-center mt-20">
             <h1 className="text-5xl font-bold">players</h1>
             {/* drop down menu with list of players */}
-            <select>
+            <select onChange={(e) => {setValue(e.target.value)}}>
                 {data.data.map(player => {
                     return (
                         <>
@@ -40,6 +42,8 @@ export default function PlayersPage() {
                 })
                 }
             </select>
+            <br></br><br></br>
+            {value}
         </div>
     )
 }
