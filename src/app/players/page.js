@@ -5,10 +5,12 @@ import React, { useState, useEffect } from "react"
 
 export default function PlayersPage() {
     const [data, setData] = useState(null)
+    const [stats, setStats] = useState(null)
     const [isLoading, setLoading] = useState(true)
 
     const [value, setValue] = useState('')
 
+    // getting list of players
     useEffect(() => {
         fetch('https://www.balldontlie.io/api/v1/players')
             .then((res) => res.json())
@@ -18,6 +20,18 @@ export default function PlayersPage() {
                 console.log(data)
             })
     }, [])
+
+    // retrieving data from selected player
+    useEffect(() => {
+        fetch(`https://www.balldontlie.io/api/v1/players?search=${value}`)
+            .then((res) => res.json())
+            
+            .then((stats) => {
+                setStats(stats)
+                setLoading(false)
+                console.log(stats)
+            })
+    }, [value])
 
     if (isLoading) return <p>Loading...</p>
     if (!data) return <p>No profile data</p>
@@ -44,6 +58,23 @@ export default function PlayersPage() {
             </select>
             <br></br><br></br>
             {value}
+            {value == 'Lorenzo Brown'? <p>This is Lorenzo</p>: null}
+            {/* retrieving data from selected individual */}
+            {stats?.data.map(stats => {
+                    return (
+                        <>
+                            <option>
+                                <p key={stats.id}>
+                                    <Link href={`/players/${stats.id}`}>
+                                        {stats.first_name} {stats.last_name} {stats.position} {stats?.team.full_name}
+                                    </Link>
+                                </p>
+                            </option>
+                        </>
+                    )
+                })
+                }
+            
         </div>
     )
 }
