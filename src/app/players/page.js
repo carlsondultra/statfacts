@@ -36,7 +36,7 @@ export default function PlayersPage() {
             })
     }, [value])
 
-    // retrieving stats from selected player
+    // retrieving stats from selected player using their player ID
     useEffect(() => {
         fetch(`https://www.balldontlie.io/api/v1/season_averages?season=2018&player_ids[]=${id}`)
             .then((res) => res.json())
