@@ -6,6 +6,9 @@ import React, { useState, useEffect } from "react"
 export default function PlayersPage() {
     const [data, setData] = useState(null)
     const [stats, setStats] = useState(null)
+
+    const [id, setId] = useState(null)
+    const [avg, setAvg] = useState(null)
     const [isLoading, setLoading] = useState(true)
 
     const [value, setValue] = useState('')
@@ -17,7 +20,6 @@ export default function PlayersPage() {
             .then((data) => {
                 setData(data)
                 setLoading(false)
-                console.log(data)
             })
     }, [])
 
@@ -28,10 +30,23 @@ export default function PlayersPage() {
             
             .then((stats) => {
                 setStats(stats)
+                setId(stats.data[0].id) //setting players ID state retrieved from dropdown select
                 setLoading(false)
                 console.log(stats)
             })
     }, [value])
+
+    // retrieving stats from selected player
+    useEffect(() => {
+        fetch(`https://www.balldontlie.io/api/v1/season_averages?season=2018&player_ids[]=${id}`)
+            .then((res) => res.json())
+            
+            .then((avg) => {
+                setAvg(avg)
+                setLoading(false)
+                console.log(avg)
+            })
+    }, [id])
 
     if (isLoading) return <p>Loading...</p>
     if (!data) return <p>No profile data</p>
@@ -74,6 +89,8 @@ export default function PlayersPage() {
                     )
                 })
                 }
+                {id} <br></br>
+                In the 2018 season, {value} averaged {avg?.data[0]?.ast} assists, {avg?.data[0]?.pts} points, and {avg?.data[0]?.reb} rebounds.
             
         </div>
     )
