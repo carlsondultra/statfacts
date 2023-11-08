@@ -90,7 +90,12 @@ export default function PlayersPage() {
                 })
                 }
                 {id} <br></br>
-                In the 2018 season, {value} averaged {avg?.data[0]?.ast} assists, {avg?.data[0]?.pts} points, and {avg?.data[0]?.reb} rebounds.
+
+                {/* checking if the player has played more than 1 game in the season */}
+                {avg?.data[0]?.games_played !== 0 ? 
+                <p>In the 2018 season, {value} averaged {avg?.data[0]?.pts} points, {avg?.data[0]?.reb} rebounds, and {avg?.data[0]?.ast} assists.</p> 
+                : 
+                <p>This player did not play in the 2018 season! </p>}
             
         </div>
     )
